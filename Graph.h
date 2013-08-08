@@ -274,6 +274,14 @@ bool has_cycle (const G& gr) {
     }
     return false;}
 
+/*
+ *helper function for topological sort.
+ * @param u is a white vertex passed from topological sort.
+ * @param color is a vector that represents the color of each vertex
+ * @param s is a result container to store the result.
+ * @param gr is a graph. 
+ * everytime it finds a black vertex it stores it in the container, s.
+ */
 
 template <typename V, typename B = std::vector<int>, typename C = std::vector<int>, typename G>
 void topological_sort_helper(V u, B& color, C& s, const G& gr) {
@@ -306,8 +314,10 @@ void topological_sort_helper(V u, B& color, C& s, const G& gr) {
 
 /**
  * depth-first traversal
- * two colors
- * <your documentation>
+ * three colors
+ * White marks vertices that have yet to be discovered(=0).
+ * Gray marks a vertex that is discovered but still has vertices adjacent to it that are undiscovered(=1).
+ * A black vertex is discovered vertex that is not adjacent to any white vertices(=2).
  * @throws Boost's not_a_dag exception if has_cycle()
  */
 
