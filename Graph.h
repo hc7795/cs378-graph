@@ -281,7 +281,7 @@ bool has_cycle (const G& gr) {
     return false;}
 
 
-template <typename V, typename B = std::vector<int>, typename C = std::stack<int>, typename G>
+template <typename V, typename B = std::vector<int>, typename C = std::vector<int>, typename G>
 void topological_sort_helper(V u, B& color, C& s, const G& gr) {
     std::pair<typename G::adjacency_iterator, typename G::adjacency_iterator> adjacenctVerticesIterators= adjacent_vertices(u, gr);
     typename G::adjacency_iterator b = adjacenctVerticesIterators.first;
@@ -301,7 +301,7 @@ void topological_sort_helper(V u, B& color, C& s, const G& gr) {
     }
     
     color[u] = 2;
-    s.push(u);
+    s.push_back(u);
 }
 
 
@@ -325,20 +325,19 @@ void topological_sort (const G& gr, OI x) {
     typename G::vertex_iterator b = verticesIterators.first;
     typename G::vertex_iterator e = verticesIterators.second;
     std::vector<int> color(num_vertices(gr), 0);
-    std::stack<int> s;
+    std::vector<int> s;
     typename G::vertex_descriptor v;
     
     while(b!=e) {
         v = *b;
         if(color[v] == 0) {
-            topological_sort_helper<typename G::vertex_descriptor, std::vector<int>, std::stack<int>, G> (v, color, s, gr);
+            topological_sort_helper<typename G::vertex_descriptor, std::vector<int>, std::vector<int>, G> (v, color, s, gr);
         }
         ++b;
     }
-    while(!s.empty()) {
-        *x = s.top();
+    for (std::vector<int>::iterator it = s.begin() ; it != s.end(); ++it) {
+        *x = *it;
         ++x;
-        s.pop();
     }
 }
 #endif // Graph_h
