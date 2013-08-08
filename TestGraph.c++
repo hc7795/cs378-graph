@@ -87,7 +87,7 @@ struct TestGraph : CppUnit::TestFixture {
     edge_descriptor edCD;
     edge_descriptor edDE;
     edge_descriptor edDF;
-    edge_descriptor edFD;
+    //edge_descriptor edFD;
     edge_descriptor edFH;
     edge_descriptor edGH;
 
@@ -112,7 +112,7 @@ struct TestGraph : CppUnit::TestFixture {
         edCD = add_edge(vdC, vdD, g).first;
         edDE = add_edge(vdD, vdE, g).first;
         edDF = add_edge(vdD, vdF, g).first;
-        edFD = add_edge(vdF, vdD, g).first;
+        //edFD = add_edge(vdF, vdD, g).first;
         edFH = add_edge(vdF, vdH, g).first;
         edGH = add_edge(vdG, vdH, g).first;
     }
@@ -180,7 +180,7 @@ struct TestGraph : CppUnit::TestFixture {
 
     void test_num_edges () {
         edges_size_type es = num_edges(g);
-        CPPUNIT_ASSERT(es == 11);}
+        CPPUNIT_ASSERT(es == 10);}
 
     // -----------------
     // test_num_vertices
@@ -246,16 +246,15 @@ struct TestGraph : CppUnit::TestFixture {
     void test_topological_sort () {
         std::ostringstream out;
         topological_sort(g, std::ostream_iterator<vertex_descriptor>(out, " "));
-        CPPUNIT_ASSERT(out.str() == "2 0 1 ");}
+        CPPUNIT_ASSERT(out.str() == "4 7 5 3 1 2 0 6 ");}
 
     // -----
     // suite
     // -----
 
     CPPUNIT_TEST_SUITE(TestGraph);
-    /*
     CPPUNIT_TEST(test_add_edge);
-    CPPUNIT_TEST(test_add_edge2);
+    //CPPUNIT_TEST(test_add_edge2);
     CPPUNIT_TEST(test_adjacent_vertices);
     CPPUNIT_TEST(test_edge);
     CPPUNIT_TEST(test_edges);
@@ -265,8 +264,8 @@ struct TestGraph : CppUnit::TestFixture {
     CPPUNIT_TEST(test_target);
     CPPUNIT_TEST(test_vertex);
     CPPUNIT_TEST(test_vertices);
-     */
     CPPUNIT_TEST(test_has_cycle);
+    CPPUNIT_TEST(test_topological_sort);
     CPPUNIT_TEST_SUITE_END();};
 
 
@@ -282,11 +281,9 @@ int main () {
     cout << "TestGraph.c++" << endl;
 
     CppUnit::TextTestRunner tr;
-    tr.addTest(TestGraph< adjacency_list<setS, vecS, directedS> >::suite());
+    //tr.addTest(TestGraph< adjacency_list<setS, vecS, directedS> >::suite());
     tr.addTest(TestGraph<Graph>::suite()); // uncomment
     tr.run();
 
     cout << "Done." << endl;
     return 0;}
-
-
