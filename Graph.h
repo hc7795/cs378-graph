@@ -15,7 +15,9 @@
 #include <cstddef> // size_t
 #include <utility> // make_pair, pair
 #include <vector>  // vector
-
+#include <stack>   // stack
+#include <set>     // set
+#include "boost/graph/exception.hpp"
 // -----
 // Graph
 // -----
@@ -188,7 +190,6 @@ private:
      * <your documentation>
      */
     bool valid () const {
-        // <your code>
         return true;}
     
 public:
@@ -200,7 +201,6 @@ public:
      * <your documentation>
      */
     Graph () {
-        // <your code>
         assert(valid());}
     
     // Default copy, destructor, and copy assignment
@@ -281,8 +281,8 @@ bool has_cycle (const G& gr) {
     return false;}
 
 
-template <typename V, typename C = vector<int>, typename G>
-bool topological_sort_Helper(V u, P& p, C& color, const G& gr) {
+template <typename V, typename B = std::vector<int>, typename C = std::stack<int>, typename G>
+void topological_sort_helper(V u, B& color, C& s, const G& gr) {
     std::pair<typename G::adjacency_iterator, typename G::adjacency_iterator> adjacenctVerticesIterators= adjacent_vertices(u, gr);
     typename G::adjacency_iterator b = adjacenctVerticesIterators.first;
     typename G::adjacency_iterator e = adjacenctVerticesIterators.second;
@@ -292,19 +292,16 @@ bool topological_sort_Helper(V u, P& p, C& color, const G& gr) {
     while (b != e) {
         v = *b;
         if (color[v] == 1) {
-            return true;
+            throw boost::not_a_dag();
         }
         else if(color[v] == 0) {
-            p[v] = u;
-            if(DFS_visit(v, p, color, gr)) {
-                return true;
-            }
+            topological_sort_helper(v, color, s, gr);
         }
         ++b;
     }
     
     color[u] = 2;
-    return false;
+    s.push(u);
 }
 
 
@@ -318,6 +315,7 @@ bool topological_sort_Helper(V u, P& p, C& color, const G& gr) {
  * <your documentation>
  * @throws Boost's not_a_dag exception if has_cycle()
  */
+
 template <typename G, typename OI>
 void topological_sort (const G& gr, OI x) {
     if(has_cycle(gr))
@@ -326,16 +324,23 @@ void topological_sort (const G& gr, OI x) {
     std::pair<typename G::vertex_iterator, typename G::vertex_iterator> verticesIterators= vertices(gr);
     typename G::vertex_iterator b = verticesIterators.first;
     typename G::vertex_iterator e = verticesIterators.second;
-    typename G::vertex_descriptor activeV;
     std::vector<int> color(num_vertices(gr), 0);
     std::stack<int> s;
+    typename G::vertex_descriptor v;
     
     while(b!=e) {
         v = *b;
-        
+        if(color[v] == 0) {
+            topological_sort_helper<typename G::vertex_descriptor, std::vector<int>, std::stack<int>, G> (v, color, s, gr);
+        }
+        ++b;
+    }
+    while(!s.empty()) {
+        *x = s.top();
+        ++x;
+        s.pop();
     }
 }
-
 #endif // Graph_h
 
 
