@@ -221,8 +221,8 @@ public:
  * A black vertex is discovered vertex that is not adjacent to any white vertices(=2).
  */
 
-template <typename V, typename P = std::vector<V>, typename C = vector<int>, typename G>
-bool DFS_visit(V u, P& p, C& color, const G& gr) {
+template <typename V, typename C = vector<int>, typename G>
+bool DFS_visit(V u, C& color, const G& gr) {
     std::pair<typename G::adjacency_iterator, typename G::adjacency_iterator> adjacenctVerticesIterators= adjacent_vertices(u, gr);
     typename G::adjacency_iterator b = adjacenctVerticesIterators.first;
     typename G::adjacency_iterator e = adjacenctVerticesIterators.second;
@@ -235,8 +235,7 @@ bool DFS_visit(V u, P& p, C& color, const G& gr) {
             return true;
         }
         else if(color[v] == 0) {
-            p[v] = u;
-            if(DFS_visit(v, p, color, gr)) {
+            if(DFS_visit(v, color, gr)) {
                 return true;
             }
         }
@@ -263,17 +262,12 @@ bool has_cycle (const G& gr) {
     typename G::vertex_iterator b = verticesIterators.first;
     typename G::vertex_iterator e = verticesIterators.second;
     std::vector<int> color(num_vertices(gr), 0);
-    std::vector<typename G::vertex_descriptor> p;//predecessors
     typename G::vertex_descriptor v;
-    
-    for(unsigned int i = 0; i<num_vertices(gr); i++) {
-        p.push_back(i);
-    }
-    
+
     while (b!= e) {
         v = *b;
         if(color[v] == 0) {
-            if(DFS_visit<typename G::vertex_descriptor, std::vector<typename G::vertex_descriptor>, vector<int>, G>(v, p, color, gr))
+            if(DFS_visit<typename G::vertex_descriptor, vector<int>, G>(v, color, gr))
                 return true;
         }
         ++b;
