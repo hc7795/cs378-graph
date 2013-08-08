@@ -283,6 +283,7 @@ void topological_sort_helper(V u, B& color, C& s, const G& gr) {
     typename G::vertex_descriptor v;
     
     color[u] = 1;
+    assert(color[u] = 1);
     while (b != e) {
         v = *b;
         if (color[v] == 1) {
@@ -328,6 +329,9 @@ void topological_sort (const G& gr, OI x) {
             topological_sort_helper<typename G::vertex_descriptor, std::vector<int>, std::vector<int>, G> (v, color, s, gr);
         }
         ++b;
+    }
+    if(num_vertices(gr) > 0) {
+        assert(!s.empty());
     }
     for (std::vector<int>::iterator it = s.begin() ; it != s.end(); ++it) {
         *x = *it;
