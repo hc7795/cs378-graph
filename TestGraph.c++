@@ -264,9 +264,9 @@ struct TestGraph : CppUnit::TestFixture {
     CPPUNIT_TEST(test_source);
     CPPUNIT_TEST(test_target);
     CPPUNIT_TEST(test_vertex);
-     CPPUNIT_TEST(test_vertices);
-     CPPUNIT_TEST(test_has_cycle);
+    CPPUNIT_TEST(test_vertices);
      */
+    CPPUNIT_TEST(test_has_cycle);
     CPPUNIT_TEST_SUITE_END();};
 
 
@@ -282,9 +282,11 @@ int main () {
     cout << "TestGraph.c++" << endl;
 
     CppUnit::TextTestRunner tr;
-    //tr.addTest(TestGraph< adjacency_list<setS, vecS, directedS> >::suite());
+    tr.addTest(TestGraph< adjacency_list<setS, vecS, directedS> >::suite());
     tr.addTest(TestGraph<Graph>::suite()); // uncomment
     tr.run();
 
     cout << "Done." << endl;
     return 0;}
+
+
